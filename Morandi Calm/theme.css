@@ -4,6 +4,30 @@
  * Reference direction: warm paper, graphite glass, pastel diagrams, floating workspace.
  */
 
+@font-face {
+  font-family: "Nunito";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("assets/fonts/nunito-400.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Nunito";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("assets/fonts/nunito-600.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Nunito";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("assets/fonts/nunito-700.ttf") format("truetype");
+}
+
 /* @settings
 
 name: Morandi Calm
@@ -151,8 +175,8 @@ settings:
    ============================= */
 
 :root {
-  --mc-font-ui: -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
-  --mc-font-text: -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  --mc-font-ui: "Nunito", -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  --mc-font-text: "Nunito", -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
   --mc-font-serif: "New York", "Songti SC", "Noto Serif SC", "STSong", serif;
   --mc-font-mono: "SFMono-Regular", "Cascadia Code", "JetBrains Mono", Consolas, monospace;
   --mc-font-size: 16px;
@@ -924,7 +948,8 @@ select:focus-visible,
 .nav-file-title-content,
 .tree-item-inner {
   overflow-wrap: anywhere;
-  font-size: 12.5px;
+  font-size: 16px;
+  line-height: 1.6;
 }
 
 .nav-folder-collapse-indicator,
