@@ -1276,6 +1276,7 @@ body.morandi-grid-paper-off .markdown-preview-view { background-image: none; }
   background: color-mix(in srgb, var(--mc-surface-muted) 58%, var(--mc-editor));
   box-shadow: var(--mc-shadow-soft);
   transition: border-color var(--mc-duration-fast) var(--mc-ease);
+  text-align: center;
 }
 
 .mermaid:hover {
