@@ -1105,6 +1105,11 @@ body.morandi-grid-paper-off .markdown-preview-view { background-image: none; }
   border-radius: var(--mc-card-radius);
   background: color-mix(in srgb, rgb(var(--callout-color)) 10%, var(--mc-card-bg));
   box-shadow: var(--mc-card-shadow);
+  transition: border-color var(--mc-duration-fast) var(--mc-ease);
+}
+
+.callout:hover {
+  border-color: color-mix(in srgb, rgb(var(--callout-color)) 50%, var(--mc-border-strong));
 }
 
 .callout[data-callout="info"],
@@ -1132,6 +1137,12 @@ body.morandi-grid-paper-off .markdown-preview-view { background-image: none; }
   border-radius: var(--mc-card-radius);
   background: var(--mc-card-bg);
   box-shadow: var(--mc-card-shadow);
+  transition: border-color var(--mc-duration-fast) var(--mc-ease);
+}
+
+.markdown-rendered table:hover,
+.dataview.table-view-table:hover {
+  border-color: var(--mc-border-strong);
 }
 
 .markdown-rendered th,
@@ -1185,6 +1196,11 @@ body.morandi-grid-paper-off .markdown-preview-view { background-image: none; }
   border: 1px solid var(--mc-border);
   border-radius: var(--mc-card-radius);
   box-shadow: var(--mc-card-shadow);
+  transition: border-color var(--mc-duration-fast) var(--mc-ease);
+}
+
+.markdown-rendered pre:hover {
+  border-color: var(--mc-border-strong);
 }
 
 .markdown-rendered pre code {
@@ -1238,6 +1254,13 @@ body.morandi-grid-paper-off .markdown-preview-view { background-image: none; }
   border-radius: var(--mc-card-radius);
   background: var(--mc-card-bg);
   box-shadow: var(--mc-card-shadow);
+  transition: border-color var(--mc-duration-fast) var(--mc-ease);
+}
+
+.internal-embed:hover,
+.markdown-embed:hover,
+.file-embed:hover {
+  border-color: var(--mc-border-strong);
 }
 
 /* =============================
@@ -1251,11 +1274,28 @@ body.morandi-grid-paper-off .markdown-preview-view { background-image: none; }
   border: 1px solid var(--mc-card-border);
   border-radius: var(--mc-radius-lg);
   background: color-mix(in srgb, var(--mc-surface-muted) 58%, var(--mc-editor));
-  box-shadow: var(--mc-shadow-panel);
+  box-shadow: var(--mc-shadow-soft);
+  transition: border-color var(--mc-duration-fast) var(--mc-ease);
+}
+
+.mermaid:hover {
+  border-color: var(--mc-border-strong);
+}
+
+/* Edit-mode: suppress the heavy embed hover frame that Obsidian adds
+   around rendered blocks in Live Preview.  Affected elements use their
+   own border-color transition instead. */
+.markdown-source-view .internal-embed:hover,
+.markdown-source-view .cm-embed-block:hover,
+.markdown-source-view .HyperMD-widget:hover {
+  box-shadow: none !important;
+  border-color: transparent !important;
+  outline: none !important;
 }
 
 .mermaid svg { max-width: 100%; height: auto; }
 
+/* 节点背景和边框 */
 .mermaid .node rect,
 .mermaid .node polygon,
 .mermaid .node circle,
@@ -1263,6 +1303,46 @@ body.morandi-grid-paper-off .markdown-preview-view { background-image: none; }
   fill: color-mix(in srgb, var(--mc-pastel-blue) 30%, var(--mc-surface-raised)) !important;
   stroke: color-mix(in srgb, var(--mc-pastel-blue) 68%, var(--mc-text-muted)) !important;
   stroke-width: 1px !important;
+}
+
+/* 节点颜色变化 */
+.mermaid .node:nth-of-type(5n + 2) rect,
+.mermaid .node:nth-of-type(5n + 2) polygon { fill: color-mix(in srgb, var(--mc-pastel-rose) 31%, var(--mc-surface-raised)) !important; }
+.mermaid .node:nth-of-type(5n + 3) rect,
+.mermaid .node:nth-of-type(5n + 3) polygon { fill: color-mix(in srgb, var(--mc-pastel-sage) 31%, var(--mc-surface-raised)) !important; }
+.mermaid .node:nth-of-type(5n + 4) rect,
+.mermaid .node:nth-of-type(5n + 4) polygon { fill: color-mix(in srgb, var(--mc-pastel-lilac) 31%, var(--mc-surface-raised)) !important; }
+.mermaid .node:nth-of-type(5n) rect,
+.mermaid .node:nth-of-type(5n) polygon { fill: color-mix(in srgb, var(--mc-pastel-sand) 31%, var(--mc-surface-raised)) !important; }
+
+/* 隐藏节点内的小装饰框 */
+.mermaid .node rect {
+  fill: transparent !important;
+  stroke: none !important;
+}
+
+/* 只保留节点主背景 */
+.mermaid .node > rect,
+.mermaid .node > g > rect:first-child {
+  fill: color-mix(in srgb, var(--mc-pastel-blue) 30%, var(--mc-surface-raised)) !important;
+  stroke: color-mix(in srgb, var(--mc-pastel-blue) 68%, var(--mc-text-muted)) !important;
+  stroke-width: 1px !important;
+}
+
+/* 恢复文字显示 */
+.mermaid .node text,
+.mermaid .nodeLabel tspan,
+.mermaid .edgeLabel tspan,
+.mermaid .label text {
+  fill: var(--mc-text-strong) !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+/* 确保箭头可见 */
+.mermaid .edgePath .path {
+  stroke: var(--mc-text-muted) !important;
+  stroke-width: 1.15px !important;
 }
 
 .mermaid .node:nth-of-type(5n + 2) rect,
@@ -1299,18 +1379,30 @@ body.morandi-grid-paper-off .markdown-preview-view { background-image: none; }
   font-family: var(--mc-font-text) !important;
 }
 
-.mermaid .edgeLabel {
-  padding: 2px 4px;
-  border-radius: var(--mc-radius-xs);
-  background: var(--mc-editor-solid) !important;
+.mermaid .edgeLabel foreignObject {
+  overflow: visible;
 }
 
-.mermaid .edgeLabel p,
-.mermaid .edgeLabel span,
-.mermaid .labelBkg {
+.mermaid .edgeLabel p {
+  display: block;
+  width: 92px;
   color: var(--mc-text-strong) !important;
-  background: var(--mc-editor-solid) !important;
-  fill: var(--mc-editor-solid) !important;
+  margin: 0 -22px;
+  padding: 14px 0;
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: 1.5;
+  white-space: nowrap;
+  text-align: center;
+  border-radius: 0;
+  background: color-mix(in srgb, var(--mc-pastel-rose) 31%, var(--mc-surface-raised)) !important;
+  border: 1px solid color-mix(in srgb, var(--mc-pastel-rose) 68%, var(--mc-text-muted));
+  box-shadow: inset 0 1px 0 color-mix(in srgb, white 8%, transparent);
+}
+
+.mermaid .labelBkg {
+  background: transparent !important;
+  fill: transparent !important;
 }
 
 /* =============================
