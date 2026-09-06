@@ -1858,9 +1858,9 @@ button.mod-cta:hover {
 
   html body.is-mobile .workspace-drawer .workspace-drawer-tab-select,
   html body.is-mobile .workspace-drawer .workspace-drawer-tab-select-container {
-    background: var(--mc-panel-solid) !important;
-    border-color: var(--mc-border) !important;
-    box-shadow: var(--mc-shadow-soft) !important;
+    background: transparent !important;
+    border-color: transparent !important;
+    box-shadow: none !important;
   }
 
   /* Obsidian renders the phone drawer toolbar with nav-buttons-container,
@@ -2192,9 +2192,9 @@ button.mod-cta:hover {
 
   html body.is-mobile .workspace-drawer .workspace-drawer-tab-select,
   html body.is-mobile .workspace-drawer .workspace-drawer-tab-select-container {
-    background: var(--mc-panel-solid) !important;
-    border-color: var(--mc-border) !important;
-    box-shadow: var(--mc-shadow-soft) !important;
+    background: transparent !important;
+    border-color: transparent !important;
+    box-shadow: none !important;
   }
 
   html body.is-mobile .workspace-drawer .workspace-drawer-tab-options-list {
