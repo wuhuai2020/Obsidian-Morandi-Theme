@@ -1,0 +1,10 @@
+/* Optional preset: increase the reference-image wallpaper and glass effect. */
+body.theme-light,
+body.theme-dark {
+  --mc-wallpaper-opacity: 0.25;
+  --mc-panel-blur: 24px;
+}
+
+.workspace-split.mod-root .workspace-tab-container {
+  box-shadow: var(--mc-shadow-panel), inset 0 1px 0 color-mix(in srgb, white 8%, transparent);
+}

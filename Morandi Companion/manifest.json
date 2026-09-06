@@ -1,0 +1,9 @@
+{
+  "id": "morandi-companion",
+  "name": "Morandi Companion",
+  "version": "1.2.8",
+  "minAppVersion": "1.5.0",
+  "description": "Palette, wallpaper and live clock controls for the Morandi Calm theme.",
+  "author": "wuhuai",
+  "isDesktopOnly": false
+}

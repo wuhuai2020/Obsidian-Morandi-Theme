@@ -1,0 +1,158 @@
+.morandi-clock-visible .workspace-leaf-content[data-type="file-explorer"] .nav-files-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.nav-files-container > .morandi-clock-dock {
+  position: static;
+  flex: 0 0 auto;
+  display: grid;
+  width: 100%;
+  min-height: 296px;
+  margin-top: auto;
+  padding: 12px 16px 20px;
+  place-items: end center;
+  color: var(--mc-text, var(--text-normal));
+  background: transparent;
+}
+
+.morandi-clock-card {
+  width: min(236px, 100%);
+  padding: 14px 14px 13px;
+  text-align: center;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.morandi-clock-face {
+  width: min(182px, 96%);
+  margin-inline: auto;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 42% 34%, color-mix(in srgb, white 13%, transparent), transparent 42%),
+    color-mix(in srgb, var(--mc-surface-raised, var(--background-primary)) 88%, transparent);
+  box-shadow:
+    inset 0 0 0 1px var(--mc-border, var(--background-modifier-border)),
+    inset 0 -14px 24px color-mix(in srgb, var(--mc-canvas-alt, black) 17%, transparent),
+    var(--mc-shadow-soft, 0 8px 20px rgb(0 0 0 / 14%));
+}
+
+.morandi-clock-svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.morandi-clock-ring {
+  fill: none;
+  stroke: var(--mc-border-strong, var(--background-modifier-border-hover));
+  stroke-width: 0.75;
+}
+
+.morandi-clock-ticks line {
+  stroke: var(--mc-text-faint, var(--text-faint));
+  stroke-linecap: round;
+}
+
+.morandi-clock-ticks .is-minor {
+  stroke-width: 0.55;
+  opacity: 0.6;
+}
+
+.morandi-clock-ticks .is-major {
+  stroke-width: 1.1;
+  opacity: 0.95;
+}
+
+.morandi-clock-number {
+  fill: var(--mc-text-muted, var(--text-muted));
+  font-family: var(--mc-font-serif, serif);
+  font-size: 6px;
+  font-weight: 600;
+}
+
+.morandi-clock-hand {
+  stroke: var(--mc-text-strong, var(--text-normal));
+  stroke-linecap: round;
+}
+
+.morandi-clock-hand.is-hour { stroke-width: 3.2; }
+.morandi-clock-hand.is-minute { stroke-width: 2.1; }
+
+.morandi-clock-hand.is-second {
+  stroke: var(--mc-heading-border, var(--interactive-accent));
+  stroke-width: 0.75;
+}
+
+.morandi-clock-pin {
+  fill: var(--mc-heading-border, var(--interactive-accent));
+  stroke: var(--mc-editor-solid, var(--background-primary));
+  stroke-width: 0.8;
+}
+
+.morandi-clock-date {
+  margin-top: 14px;
+  color: var(--mc-text-muted, var(--text-muted));
+  font-family: var(--mc-font-serif, serif);
+  font-size: 12px;
+}
+
+.morandi-clock-time {
+  margin-top: 3px;
+  color: var(--mc-text-strong, var(--text-normal));
+  font-variant-numeric: tabular-nums;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+}
+
+.morandi-clock-quote {
+  margin-top: 12px;
+  color: var(--mc-text-faint, var(--text-faint));
+  font-family: var(--mc-font-serif, serif);
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.morandi-clock-quote::before {
+  content: "•";
+  margin-right: 6px;
+  color: var(--mc-accent, var(--interactive-accent));
+}
+
+@media (max-width: 900px) {
+  .nav-files-container > .morandi-clock-dock {
+    min-height: 226px;
+    padding: 10px 12px 14px;
+  }
+
+  .morandi-clock-card { width: min(226px, 100%); }
+  .morandi-clock-face { width: min(160px, 94%); }
+}
+
+@media (max-width: 600px) {
+  /* Phone drawers now use the complete viewport. Keep a compact clock in
+     the file-list scroll flow, so it never obscures files or system controls. */
+  .nav-files-container > .morandi-clock-dock {
+    display: grid;
+    min-height: 208px;
+    padding: 8px 12px calc(16px + env(safe-area-inset-bottom));
+  }
+
+  .morandi-clock-card { width: min(210px, 100%); }
+  .morandi-clock-face { width: min(146px, 92%); }
+  .morandi-clock-date { margin-top: 10px; }
+  .morandi-clock-quote { margin-top: 8px; }
+}
+
+@media (max-width: 900px) and (orientation: landscape) {
+  .nav-files-container > .morandi-clock-dock { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .morandi-clock-hand { transition: none; }
+}

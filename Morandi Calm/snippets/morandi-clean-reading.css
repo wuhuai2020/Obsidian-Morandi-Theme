@@ -1,0 +1,8 @@
+/* Optional preset: remove decorative wallpaper and maximize reading calm. */
+body.theme-light,
+body.theme-dark {
+  --mc-wallpaper-image: none;
+  --mc-wallpaper-opacity: 0;
+  --mc-panel-blur: 0px;
+  --mc-editor-width: 820px;
+}
