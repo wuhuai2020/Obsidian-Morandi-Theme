@@ -26,7 +26,6 @@ const DEFAULT_SETTINGS = {
   floatingLayout: true,
   gridPaper: true,
   folderColors: true,
-  decorations: true,
   openClockOnLoad: true,
   clockLocale: "zh-CN",
   clockQuote: "No pain, no gain.",
@@ -60,9 +59,6 @@ function normalizeSettings(data) {
     folderColors: typeof source.folderColors === "boolean"
       ? source.folderColors
       : DEFAULT_SETTINGS.folderColors,
-    decorations: typeof source.decorations === "boolean"
-      ? source.decorations
-      : DEFAULT_SETTINGS.decorations,
     openClockOnLoad: typeof source.openClockOnLoad === "boolean"
       ? source.openClockOnLoad
       : DEFAULT_SETTINGS.openClockOnLoad,
@@ -308,15 +304,6 @@ class MorandiCompanionSettingTab extends PluginSettingTab {
         }));
 
     new Setting(containerEl)
-      .setName("背景装饰")
-      .addToggle((toggle) => toggle
-        .setValue(this.plugin.settings.decorations)
-        .onChange(async (value) => {
-          this.plugin.settings.decorations = value;
-          await this.plugin.saveSettings();
-        }));
-
-    new Setting(containerEl)
       .setName("在文件列表底部显示时钟")
       .setDesc("固定在左侧文件树下方，不会替换文件列表。")
       .addToggle((toggle) => toggle
@@ -352,7 +339,16 @@ class MorandiCompanionSettingTab extends PluginSettingTab {
 
 module.exports = class MorandiCompanionPlugin extends Plugin {
   async onload() {
-    this.settings = normalizeSettings(await this.loadData());
+    const storedSettings = await this.loadData();
+    this.settings = normalizeSettings(storedSettings);
+    if (
+      storedSettings
+      && typeof storedSettings === "object"
+      && !Array.isArray(storedSettings)
+      && Object.prototype.hasOwnProperty.call(storedSettings, "decorations")
+    ) {
+      await this.saveData(this.settings);
+    }
     this.clockWidget = new MorandiClockWidget(this);
     this.activeFileRefreshFrame = 0;
     this.activeFileSettleTimer = 0;
@@ -466,6 +462,8 @@ module.exports = class MorandiCompanionPlugin extends Plugin {
       "morandi-flat-layout",
       "morandi-grid-paper-off",
       "morandi-folder-colors-off",
+      // Clean up the class left by Companion versions that exposed the
+      // removed background-decoration toggle.
       "morandi-decorations-off",
       "morandi-clock-visible",
     ].forEach((value) => document.body.classList.remove(value));
@@ -482,7 +480,6 @@ module.exports = class MorandiCompanionPlugin extends Plugin {
     document.body.classList.toggle("morandi-flat-layout", !this.settings.floatingLayout);
     document.body.classList.toggle("morandi-grid-paper-off", !this.settings.gridPaper);
     document.body.classList.toggle("morandi-folder-colors-off", !this.settings.folderColors);
-    document.body.classList.toggle("morandi-decorations-off", !this.settings.decorations);
     document.body.style.setProperty("--mc-wallpaper-opacity", String(this.settings.wallpaperOpacity));
     const assetName = WALLPAPER_ASSETS[wallpaper];
     if (assetName) {

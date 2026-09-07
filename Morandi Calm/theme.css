@@ -177,6 +177,10 @@ settings:
 :root {
   --mc-font-ui: "Nunito", -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
   --mc-font-text: "Nunito", -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  /* The file tree benefits from a softer, rounded Chinese fallback without
+     changing the editor, controls, or the user's reading font. Yuanti is
+     available on current Apple systems; YouYuan covers Windows installs. */
+  --mc-font-nav: "Yuanti SC", "Yuanti TC", "STYuanti-SC-Regular", "YouYuan", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
   --mc-font-serif: "New York", "Songti SC", "Noto Serif SC", "STSong", serif;
   --mc-font-mono: "SFMono-Regular", "Cascadia Code", "JetBrains Mono", Consolas, monospace;
   --mc-font-size: 16px;
@@ -948,8 +952,54 @@ select:focus-visible,
 .nav-file-title-content,
 .tree-item-inner {
   overflow-wrap: anywhere;
+}
+
+/* The top-level file tree and outline remain at the established 16px rhythm.
+   Nested entries sit one typographic level below it, with extra leading so
+   dense Chinese titles still have room to breathe. */
+.nav-folder-title-content,
+.nav-file-title-content {
+  font-family: var(--mc-font-nav);
+}
+
+.outline .tree-item-inner {
+  font-family: var(--mc-font-nav);
+}
+
+.nav-files-container > .nav-folder > .nav-folder-title .nav-folder-title-content,
+.nav-files-container > .nav-file > .nav-file-title .nav-file-title-content {
   font-size: 16px;
   line-height: 1.6;
+}
+
+.nav-folder-children .nav-folder-title-content,
+.nav-folder-children .nav-file-title-content {
+  font-size: 15px;
+  line-height: 1.75;
+}
+
+.nav-folder-children > .nav-folder > .nav-folder-title,
+.nav-folder-children > .nav-file > .nav-file-title {
+  min-height: 32px;
+}
+
+.tree-item-inner {
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.outline > .tree-item-children > .tree-item > .tree-item-self .tree-item-inner {
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.outline > .tree-item-children .tree-item-children .tree-item-inner {
+  font-size: 15px;
+  line-height: 1.75;
+}
+
+.outline > .tree-item-children .tree-item-children > .tree-item > .tree-item-self {
+  min-height: 32px;
 }
 
 .nav-folder-collapse-indicator,
@@ -2059,8 +2109,13 @@ button.mod-cta:hover {
     gap: 8px;
   }
 
+  .workspace-drawer .nav-folder-title,
   .workspace-drawer .nav-file-title,
   .workspace-drawer .tree-item-self {
+    min-height: 40px;
+  }
+
+  .workspace-drawer .outline > .tree-item-children .tree-item-children > .tree-item > .tree-item-self {
     min-height: 40px;
   }
 }
