@@ -462,9 +462,6 @@ module.exports = class MorandiCompanionPlugin extends Plugin {
       "morandi-flat-layout",
       "morandi-grid-paper-off",
       "morandi-folder-colors-off",
-      // Clean up the class left by Companion versions that exposed the
-      // removed background-decoration toggle.
-      "morandi-decorations-off",
       "morandi-clock-visible",
     ].forEach((value) => document.body.classList.remove(value));
     document.body.style.removeProperty("--mc-wallpaper-opacity");

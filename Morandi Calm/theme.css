@@ -140,10 +140,6 @@ settings:
     title: 关闭文件夹彩色标记
     type: class-toggle
   -
-    id: morandi-decorations-off
-    title: 关闭装饰图形
-    type: class-toggle
-  -
     id: mc-type-heading
     title: 排版
     type: heading
@@ -554,20 +550,6 @@ body.theme-dark .workspace::before {
   isolation: isolate;
 }
 
-.workspace::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  opacity: 0.72;
-  background:
-    radial-gradient(circle at 18% 76%, transparent 0 58px, color-mix(in srgb, var(--mc-accent) 18%, transparent) 59px 60px, transparent 61px 84px, color-mix(in srgb, var(--mc-accent) 11%, transparent) 85px 86px, transparent 87px),
-    radial-gradient(circle at 82% 24%, transparent 0 42px, color-mix(in srgb, var(--mc-accent) 14%, transparent) 43px 44px, transparent 45px 66px, color-mix(in srgb, var(--mc-accent) 9%, transparent) 67px 68px, transparent 69px),
-    linear-gradient(132deg, transparent 0 70%, color-mix(in srgb, var(--mc-pastel-rose) 8%, transparent) 70% 71%, transparent 71%),
-    linear-gradient(48deg, transparent 0 77%, color-mix(in srgb, var(--mc-pastel-blue) 8%, transparent) 77% 78%, transparent 78%);
-}
-
 .workspace-split.mod-left-split::before,
 .workspace-split.mod-right-split::before,
 .workspace-split.mod-root::before,
@@ -581,8 +563,6 @@ body.morandi-wallpaper-terrace { --mc-wallpaper-image: url("assets/morandi-terra
 body.morandi-wallpaper-garden { --mc-wallpaper-image: url("assets/morandi-garden.png"); }
 body.morandi-wallpaper-clouds { --mc-wallpaper-image: url("assets/morandi-clouds.png"); }
 body.morandi-wallpaper-none { --mc-wallpaper-image: none; }
-
-body.morandi-decorations-off .workspace::after { display: none; }
 
 .titlebar,
 .status-bar {
@@ -1654,8 +1634,6 @@ button.mod-cta:hover {
     --mc-space-5: 24px;
   }
 
-  .workspace::after { opacity: 0.38; }
-
   .workspace-split.mod-root { padding: 0; }
 
   .workspace-split.mod-root .workspace-tab-container {
@@ -1747,8 +1725,8 @@ button.mod-cta:hover {
   }
 }
 
-/* Phone portrait: remove nonessential ornament, preserve comfortable type and
-   make every app control a reliable tap target. */
+/* Phone portrait: preserve comfortable type and make every app control a
+   reliable tap target. */
 @media (max-width: 600px) {
   :root {
     --mc-space-4: 16px;
@@ -1765,7 +1743,6 @@ button.mod-cta:hover {
     --mobile-sidebar-radius: 0px !important;
   }
 
-  .workspace::after { display: none; }
   .workspace::before { background-position: 50% 0; }
 
   .workspace-tab-header-container { padding-inline: 4px; }
@@ -2121,7 +2098,6 @@ button.mod-cta:hover {
 }
 
 @media (orientation: landscape) {
-  html body.is-mobile .workspace::after { display: none; }
   html body.is-mobile .workspace-tab-header-container,
   html body.is-mobile .view-header { min-height: 40px; }
 
