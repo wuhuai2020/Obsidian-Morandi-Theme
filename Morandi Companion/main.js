@@ -16,6 +16,8 @@ const WALLPAPER_ASSETS = Object.freeze({
   clouds: "morandi-clouds.png",
 });
 const WALLPAPERS = [...Object.keys(WALLPAPER_ASSETS), "none"];
+const CLOCK_LOCALES = ["zh-CN", "en-US", "auto"];
+const MAX_CLOCK_QUOTE_LENGTH = 240;
 
 const DEFAULT_SETTINGS = {
   palette: "sand",
@@ -29,6 +31,47 @@ const DEFAULT_SETTINGS = {
   clockLocale: "zh-CN",
   clockQuote: "No pain, no gain.",
 };
+
+function clamp(value, min, max) {
+  return Math.min(Math.max(value, min), max);
+}
+
+function normalizeSettings(data) {
+  const source = data && typeof data === "object" && !Array.isArray(data) ? data : {};
+  const wallpaperOpacity = typeof source.wallpaperOpacity === "number"
+    ? source.wallpaperOpacity
+    : Number.NaN;
+  const clockQuote = typeof source.clockQuote === "string"
+    ? source.clockQuote.trim().slice(0, MAX_CLOCK_QUOTE_LENGTH)
+    : DEFAULT_SETTINGS.clockQuote;
+
+  return {
+    palette: PALETTES.includes(source.palette) ? source.palette : DEFAULT_SETTINGS.palette,
+    wallpaper: WALLPAPERS.includes(source.wallpaper) ? source.wallpaper : DEFAULT_SETTINGS.wallpaper,
+    wallpaperOpacity: Number.isFinite(wallpaperOpacity)
+      ? clamp(wallpaperOpacity, 0, 0.36)
+      : DEFAULT_SETTINGS.wallpaperOpacity,
+    floatingLayout: typeof source.floatingLayout === "boolean"
+      ? source.floatingLayout
+      : DEFAULT_SETTINGS.floatingLayout,
+    gridPaper: typeof source.gridPaper === "boolean"
+      ? source.gridPaper
+      : DEFAULT_SETTINGS.gridPaper,
+    folderColors: typeof source.folderColors === "boolean"
+      ? source.folderColors
+      : DEFAULT_SETTINGS.folderColors,
+    decorations: typeof source.decorations === "boolean"
+      ? source.decorations
+      : DEFAULT_SETTINGS.decorations,
+    openClockOnLoad: typeof source.openClockOnLoad === "boolean"
+      ? source.openClockOnLoad
+      : DEFAULT_SETTINGS.openClockOnLoad,
+    clockLocale: CLOCK_LOCALES.includes(source.clockLocale)
+      ? source.clockLocale
+      : DEFAULT_SETTINGS.clockLocale,
+    clockQuote,
+  };
+}
 
 function createSvgElement(name, attrs = {}) {
   const element = document.createElementNS("http://www.w3.org/2000/svg", name);
@@ -150,9 +193,12 @@ class MorandiClockWidget {
     this.minuteHand.setAttribute("transform", `rotate(${minutes * 6} 50 50)`);
     this.secondHand.setAttribute("transform", `rotate(${seconds * 6} 50 50)`);
 
-    const locale = this.plugin.settings.clockLocale === "auto"
+    const clockLocale = CLOCK_LOCALES.includes(this.plugin.settings.clockLocale)
+      ? this.plugin.settings.clockLocale
+      : DEFAULT_SETTINGS.clockLocale;
+    const locale = clockLocale === "auto"
       ? undefined
-      : this.plugin.settings.clockLocale;
+      : clockLocale;
     this.dateEl.setText(new Intl.DateTimeFormat(locale, {
       weekday: "long",
       month: "long",
@@ -163,7 +209,10 @@ class MorandiClockWidget {
       minute: "2-digit",
       hour12: false,
     }).format(now));
-    this.quoteEl.setText(this.plugin.settings.clockQuote || " ");
+    const quote = typeof this.plugin.settings.clockQuote === "string"
+      ? this.plugin.settings.clockQuote
+      : DEFAULT_SETTINGS.clockQuote;
+    this.quoteEl.setText(quote || " ");
   }
 
   destroy() {
@@ -303,7 +352,7 @@ class MorandiCompanionSettingTab extends PluginSettingTab {
 
 module.exports = class MorandiCompanionPlugin extends Plugin {
   async onload() {
-    this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
+    this.settings = normalizeSettings(await this.loadData());
     this.clockWidget = new MorandiClockWidget(this);
     this.activeFileRefreshFrame = 0;
     this.activeFileSettleTimer = 0;
@@ -349,7 +398,7 @@ module.exports = class MorandiCompanionPlugin extends Plugin {
     });
 
     this.detachLegacyClockLeaves();
-    this.registerInterval(window.setTimeout(() => {
+    const initialSyncTimer = window.setTimeout(() => {
       this.detachLegacyClockLeaves();
       this.syncClock();
       this.observeFileExplorer();
@@ -357,7 +406,8 @@ module.exports = class MorandiCompanionPlugin extends Plugin {
       this.scheduleCurrentFileMarker();
       this.scheduleSettledCurrentFileMarker();
       this.scheduleMobileDrawerWorkAreaNormalization();
-    }, 400));
+    }, 400);
+    this.register(() => window.clearTimeout(initialSyncTimer));
 
     this.registerEvent(this.app.workspace.on("layout-change", () => {
       if (this.settings.openClockOnLoad) this.syncClock();
@@ -403,6 +453,7 @@ module.exports = class MorandiCompanionPlugin extends Plugin {
   }
 
   async saveSettings() {
+    this.settings = normalizeSettings(this.settings);
     await this.saveData(this.settings);
     this.applyThemeClasses();
     this.syncClock();
@@ -598,10 +649,14 @@ module.exports = class MorandiCompanionPlugin extends Plugin {
     }
 
     const host = this.getFileExplorerHost();
-    if (host) {
-      document.body.classList.add("morandi-clock-visible");
-      this.clockWidget.mount(host);
+    if (!host) {
+      document.body.classList.remove("morandi-clock-visible");
+      this.clockWidget.destroy();
+      return;
     }
+
+    document.body.classList.add("morandi-clock-visible");
+    this.clockWidget.mount(host);
   }
 
   async toggleClock() {

@@ -1,5 +1,5 @@
 /*
- * Morandi Calm 2.1
+ * Morandi Calm 2.3.10
  * A quiet, low-saturation theme system for Obsidian.
  * Reference direction: warm paper, graphite glass, pastel diagrams, floating workspace.
  */
@@ -1371,15 +1371,6 @@ body.morandi-grid-paper-off .markdown-preview-view { background-image: none; }
   stroke-width: 1.15px !important;
 }
 
-.mermaid .node:nth-of-type(5n + 2) rect,
-.mermaid .node:nth-of-type(5n + 2) polygon { fill: color-mix(in srgb, var(--mc-pastel-rose) 31%, var(--mc-surface-raised)) !important; }
-.mermaid .node:nth-of-type(5n + 3) rect,
-.mermaid .node:nth-of-type(5n + 3) polygon { fill: color-mix(in srgb, var(--mc-pastel-sage) 31%, var(--mc-surface-raised)) !important; }
-.mermaid .node:nth-of-type(5n + 4) rect,
-.mermaid .node:nth-of-type(5n + 4) polygon { fill: color-mix(in srgb, var(--mc-pastel-lilac) 31%, var(--mc-surface-raised)) !important; }
-.mermaid .node:nth-of-type(5n) rect,
-.mermaid .node:nth-of-type(5n) polygon { fill: color-mix(in srgb, var(--mc-pastel-sand) 31%, var(--mc-surface-raised)) !important; }
-
 .mermaid .cluster rect {
   fill: color-mix(in srgb, var(--mc-surface-raised) 76%, transparent) !important;
   stroke: var(--mc-border-strong) !important;
@@ -1475,9 +1466,10 @@ select,
   background: var(--mc-control-bg);
 }
 
-/* 修复下拉列表框多个箭头问题：移除原生箭头并确保Obsidian自定义箭头正常显示 */
-select,
-.dropdown {
+/* Keep dropdown arrow overrides inside settings controls so third-party views
+   can keep their own select and menu styling. */
+.setting-item select,
+.setting-item .dropdown {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
@@ -1485,15 +1477,15 @@ select,
 }
 
 /* Obsidian dropdown组件：隐藏多余的箭头元素，只保留一个 */
-.dropdown .dropdown-arrow,
-.dropdown .dropdown-chevron,
-.dropdown > svg:first-of-type,
-.dropdown > .clickable-icon:first-of-type {
+.setting-item .dropdown .dropdown-arrow,
+.setting-item .dropdown .dropdown-chevron,
+.setting-item .dropdown > svg:first-of-type,
+.setting-item .dropdown > .clickable-icon:first-of-type {
   display: none !important;
 }
 
 /* 为select添加单个自定义箭头 */
-select {
+.setting-item select {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath fill='%23888' d='M5 6L0 0h10z'/%3E%3C/svg%3E") !important;
   background-repeat: no-repeat !important;
   background-position: right 10px center !important;
@@ -1502,11 +1494,11 @@ select {
 }
 
 /* 确保dropdown只有一个箭头：通过伪元素添加 */
-.dropdown {
+.setting-item .dropdown {
   position: relative;
 }
 
-.dropdown::after {
+.setting-item .dropdown::after {
   content: "";
   position: absolute;
   right: 10px;
@@ -2067,11 +2059,6 @@ button.mod-cta:hover {
     gap: 8px;
   }
 
-  .workspace-drawer .workspace-drawer-vault-actions .clickable-icon {
-    width: 44px;
-    height: 44px;
-  }
-
   .workspace-drawer .nav-file-title,
   .workspace-drawer .tree-item-self {
     min-height: 40px;
@@ -2245,6 +2232,44 @@ button.mod-cta:hover {
     border-radius: 999px !important;
     overflow: hidden;
   }
+}
+
+/* Obsidian 1.13 renders the phone drawer gear as a raised header icon rather
+   than a vault-action button. Remove both its raised surface and iOS mask. */
+body.is-mobile .workspace-drawer .workspace-drawer-header-icon.mod-settings.mod-raised {
+  --raised-background: transparent;
+  --raised-shadow: none;
+  --raised-mask-display: none;
+  --raised-mask-background: none;
+  --raised-mask-border-width: 0px;
+  min-width: 44px;
+  min-height: 44px;
+  border: 0 !important;
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+body.is-mobile .workspace-drawer .workspace-drawer-header-icon.mod-settings.mod-raised::before,
+body.is-mobile .workspace-drawer .workspace-drawer-header-icon.mod-settings.mod-raised::after {
+  display: none !important;
+  content: none !important;
+  border: 0 !important;
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+body.is-mobile .workspace-drawer .workspace-drawer-header-icon.mod-settings.mod-raised:active {
+  background-color: color-mix(
+    in srgb,
+    var(--mc-text-muted, var(--text-muted)) 12%,
+    transparent
+  ) !important;
 }
 
 @media (hover: none) and (pointer: coarse) {

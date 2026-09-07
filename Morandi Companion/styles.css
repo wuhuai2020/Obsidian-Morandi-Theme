@@ -153,6 +153,44 @@
   .nav-files-container > .morandi-clock-dock { display: none; }
 }
 
+/* Obsidian 1.13 renders the phone drawer gear as a raised header icon. This
+   plugin stylesheet loads last, so it is the final guard for the exact node. */
+body.is-mobile .workspace-drawer .workspace-drawer-header-icon.mod-settings.mod-raised {
+  --raised-background: transparent;
+  --raised-shadow: none;
+  --raised-mask-display: none;
+  --raised-mask-background: none;
+  --raised-mask-border-width: 0px;
+  min-width: 44px;
+  min-height: 44px;
+  border: 0 !important;
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+body.is-mobile .workspace-drawer .workspace-drawer-header-icon.mod-settings.mod-raised::before,
+body.is-mobile .workspace-drawer .workspace-drawer-header-icon.mod-settings.mod-raised::after {
+  display: none !important;
+  content: none !important;
+  border: 0 !important;
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+body.is-mobile .workspace-drawer .workspace-drawer-header-icon.mod-settings.mod-raised:active {
+  background-color: color-mix(
+    in srgb,
+    var(--mc-text-muted, var(--text-muted)) 12%,
+    transparent
+  ) !important;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .morandi-clock-hand { transition: none; }
 }
